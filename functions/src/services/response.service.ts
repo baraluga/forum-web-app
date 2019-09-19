@@ -12,8 +12,8 @@ export class ResponseService {
 
     sendError = (message = 'Something went wrong!', code = 500) =>
         this._response.status(code).json({
-            responded_at: today(),
-            message: message
+            respondedAt: today(),
+            message: String(message)
         } as BaseResponse)
 
     sendOK = (payload?: {}, code = 200) =>
@@ -21,6 +21,6 @@ export class ResponseService {
 }
 
 interface BaseResponse {
-    responded_at: string;
+    respondedAt: string;
     message?: string;
 }
