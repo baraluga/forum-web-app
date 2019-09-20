@@ -13,7 +13,7 @@ export const createTopicHandler = (req: Request, res: Response) => {
         (_) => responder.sendOK({
             createdAt: now,
             updatedAt: now,
-        } as CreateUpdateTopicResponse),
+        } as Topic),
         (error) => responder.sendError(error),
     )
 }

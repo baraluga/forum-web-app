@@ -2,7 +2,8 @@ interface BaseContentRequest {
     token: string;
 }
 
-interface BaseContentResponse {
+interface BaseContent {
+    id: string;
     createdBy: string;
     updatedBy: string;
     createdAt: string;
@@ -14,12 +15,13 @@ interface CreateUpdateTopicRequest extends BaseContentRequest {
     description: string;
 }
 
-interface CreateUpdateTopicResponse extends BaseContentResponse {
-    id: string;
-    subject: string;
-    description: string;
+interface Message {
+    topicId: string;
+    message: string;
 }
 
-interface DeleteTopicResponse {
-    success: boolean;
+interface Topic extends BaseContent {
+    subject: string;
+    description: string;
+    deletedAt?: string;
 }
