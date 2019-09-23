@@ -15,7 +15,7 @@ interface CreateUpdateTopicRequest extends BaseContentRequest {
     description: string;
 }
 
-interface Message {
+interface Message extends BaseContent {
     topicId: string;
     message: string;
 }
