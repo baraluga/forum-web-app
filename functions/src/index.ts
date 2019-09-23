@@ -1,19 +1,16 @@
 // import * as cors from 'cors';
-import * as express from 'express';
 import * as firebase from 'firebase';
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
 import { firebaseConfig } from './config';
+import { ContentApplication } from './services/content/content.application';
 import { UserApplication } from './services/user/user.application';
 
 admin.initializeApp();
 firebase.initializeApp(firebaseConfig);
 
 // Instantiate user microservice
-exports.user = functions.https.onRequest(new UserApplication()._expressApp);
+exports.user = functions.https.onRequest(new UserApplication().toExpressApp());
 
-const contentService = express();
-exports.topic = functions.https.onRequest(contentService);
-
-// Initialize firebase application;
-// admin.initializeApp();
+// Instantiate content microservice
+exports.topic = functions.https.onRequest(new ContentApplication().toExpressApp());

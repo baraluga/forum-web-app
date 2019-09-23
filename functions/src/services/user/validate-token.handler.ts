@@ -7,9 +7,8 @@ export const VALIDATE_ENDPOINT = '/validate'
 export const validateTokenHandler = (req: Request, resp: Response) => {
   const rsp = new ResponseService(resp);
   admin.auth().verifyIdToken(req.body.token)
-    .catch(_ => rsp.sendError('yikes'))
-    .then(isIt => {
-      console.log(isIt);
-      rsp.sendOK();
+    .catch(error => rsp.sendError(error))
+    .then(_ => {
+      rsp.sendOK({ message: 'Token is valid!' });
     })
 }

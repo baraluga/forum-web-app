@@ -4,10 +4,9 @@ import { registrationHandler, REGISTRATION_ENDPOINT } from './registration.handl
 import { validateTokenHandler, VALIDATE_ENDPOINT } from './validate-token.handler';
 
 export class UserApplication extends BaseApplication {
-    constructor() {
-        super();
-        this._expressApp.post(REGISTRATION_ENDPOINT, registrationHandler);
-        this._expressApp.post(LOGIN_ENDPOINT, loginHandler);
-        this._expressApp.post(VALIDATE_ENDPOINT, validateTokenHandler);
+    attachEndpoints() {
+        this.toExpressApp().post(REGISTRATION_ENDPOINT, registrationHandler);
+        this.toExpressApp().post(LOGIN_ENDPOINT, loginHandler);
+        this.toExpressApp().post(VALIDATE_ENDPOINT, validateTokenHandler);
     }
 }

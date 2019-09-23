@@ -17,7 +17,10 @@ export class ResponseService {
         } as BaseResponse)
 
     sendOK = (payload?: {}, code = 200) =>
-        this._response.status(code).json(payload);
+        this._response.status(code).json({
+            ...payload,
+            respondedAt: today()
+        } as BaseResponse);
 }
 
 interface BaseResponse {
