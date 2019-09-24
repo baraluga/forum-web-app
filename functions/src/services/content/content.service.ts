@@ -33,7 +33,7 @@ export const getTopic$ = (topicId: string) => topicsVal$().pipe(
 
 
 export const addTopic$ = (topic: Topic) => topicsVal$().pipe(
-  mergeMap(currentVal => topicsRef().set([...currentVal, topic])),
+  mergeMap(currentVal => topicsRef().set([...(currentVal || []), topic])),
   mergeMapTo(of(topic)),
 );
 
