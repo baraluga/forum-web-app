@@ -3,8 +3,7 @@ import * as firebase from 'firebase';
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
 import { firebaseConfig } from './config';
-import { ContentApplication } from './services/content/content.application';
-import { UserApplication } from './services/user/user.application';
+import { ContentApplication, UserApplication } from './services';
 
 admin.initializeApp();
 firebase.initializeApp(firebaseConfig);

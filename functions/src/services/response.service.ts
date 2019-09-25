@@ -21,9 +21,16 @@ export class ResponseService {
             ...payload,
             respondedAt: today()
         } as BaseResponse);
+
+    sendMissingParams = (...params: string[]) => this.sendError(
+        `Required parameters (${params.join(', ')}) are missing from this request!`,
+        400
+    )
 }
+
 
 interface BaseResponse {
     respondedAt: string;
     message?: string;
 }
+

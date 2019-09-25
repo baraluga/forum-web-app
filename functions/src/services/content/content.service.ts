@@ -1,6 +1,6 @@
 import * as admin from 'firebase-admin';
 import { combineLatest, from, of, throwError } from 'rxjs';
-import { catchError, first, map, mergeMap, mergeMapTo, tap } from 'rxjs/operators';
+import { catchError, first, map, mergeMap, mergeMapTo, tap, delay } from 'rxjs/operators';
 import { today } from '../../utils';
 import uuid = require('uuid');
 import { TopicNotOwner, TopicNotFound } from './content.errors';
@@ -58,16 +58,20 @@ export const createTopic$ = (
 export const updateTopic$ = (userId: string, topic: {
   topicId: string, subject: string, description: string
 }) => combineLatest([
-  isTopicOwner$(userId, topic.topicId),
+  getTopic$(topic.topicId),
   topicsVal$(),
 ]).pipe(
   mergeMap(([existingTopic, currentTopics]) => topicsRef().set([
     ...currentTopics.filter(_topic => _topic.id !== topic.topicId), {
       ...existingTopic,
       subject: topic.subject,
-      description: topic.description
+      description: topic.description,
+      updatedBy: userId,
+      updatedAt: today(),
     }
   ])),
+  delay(1000),
+  mergeMapTo(getTopic$(topic.topicId)),
 )
 
 export const createMessage$ = (userId: string, topicId: string,
