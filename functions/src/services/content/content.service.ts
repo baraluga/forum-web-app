@@ -104,5 +104,9 @@ export const getMessages$ = (userId: string, topicId: string) => combineLatest([
     currentMessages.filter(message => message.topicId === topicId)),
 )
 
+export const getTopics$ = (userId: string) => topicsVal$().pipe(
+  map(topics => topics.filter(topic => topic.createdBy === userId)),
+)
+
 
 
