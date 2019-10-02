@@ -1,9 +1,9 @@
 import * as admin from 'firebase-admin';
 import { combineLatest, from, of, throwError } from 'rxjs';
-import { catchError, first, map, mergeMap, mergeMapTo, tap, delay } from 'rxjs/operators';
+import { catchError, first, map, mergeMap, mergeMapTo, tap } from 'rxjs/operators';
 import { today } from '../../utils';
+import { TopicNotFound, TopicNotOwner } from './content.errors';
 import uuid = require('uuid');
-import { TopicNotOwner, TopicNotFound } from './content.errors';
 
 export const dbRef = (refPath: string) => admin.database().ref(refPath);
 
@@ -13,12 +13,14 @@ export const messagesRef = () => dbRef('/messages');
 
 export const topicsVal$ = () => from(topicsRef().once('value')).pipe(
   first(),
-  map(snapshot => (snapshot.val() as Topic[])),
+  map(snapshot => ((snapshot.val() as Topic[]) || [])),
+  map(topics => topics.filter(topic => !!!topic.deletedAt)),
 );
 
 export const messagesVal$ = () => from(messagesRef().once('value')).pipe(
   first(),
-  map(snapshot => (snapshot.val() as Message[])),
+  map(snapshot => ((snapshot.val() as Message[]) || [])),
+  map(messages => messages.filter(message => !!!message.deletedAt)),
 )
 
 export const topicsCreatedBy$ = (userId: string) => topicsVal$().pipe(
@@ -26,6 +28,7 @@ export const topicsCreatedBy$ = (userId: string) => topicsVal$().pipe(
 );
 
 export const getTopic$ = (topicId: string) => topicsVal$().pipe(
+  tap(_ => console.log('getting topic...')),
   map(topics => topics.find(_topic => _topic.id === topicId)),
   catchError(_ => throwError(new TopicNotFound())),
 );
@@ -56,22 +59,19 @@ export const createTopic$ = (
 });
 
 export const updateTopic$ = (userId: string, topic: {
-  topicId: string, subject: string, description: string
+  id: string, subject?: string, description?: string, deletedAt?: string,
 }) => combineLatest([
-  getTopic$(topic.topicId),
+  getTopic$(topic.id),
   topicsVal$(),
 ]).pipe(
   mergeMap(([existingTopic, currentTopics]) => topicsRef().set([
-    ...currentTopics.filter(_topic => _topic.id !== topic.topicId), {
+    ...currentTopics.filter(_topic => _topic.id !== topic.id), {
       ...existingTopic,
-      subject: topic.subject,
-      description: topic.description,
+      ...topic,
       updatedBy: userId,
       updatedAt: today(),
     }
   ])),
-  delay(1000),
-  mergeMapTo(getTopic$(topic.topicId)),
 )
 
 export const createMessage$ = (userId: string, topicId: string,
@@ -89,7 +89,7 @@ export const createMessage$ = (userId: string, topicId: string,
     messagesVal$(),
   ]).pipe(
     mergeMap(([_o, currentMessages]) => messagesRef().set([
-      ...currentMessages, newMessage as Message
+      ...(currentMessages || []), newMessage as Message
     ])),
     mergeMapTo(of(newMessage as Message)),
   )
@@ -107,6 +107,11 @@ export const getMessages$ = (userId: string, topicId: string) => combineLatest([
 export const getTopics$ = (userId: string) => topicsVal$().pipe(
   map(topics => topics.filter(topic => topic.createdBy === userId)),
 )
+
+export const deleteTopic$ = (userId: string, topicId: string) => updateTopic$(
+  userId, { id: topicId, deletedAt: today() }
+)
+
 
 
 

@@ -8,6 +8,7 @@ interface BaseContent {
     updatedBy: string;
     createdAt: string;
     updatedAt: string;
+    deletedAt?: string;
 }
 
 interface CreateUpdateTopicRequest extends BaseContentRequest {
