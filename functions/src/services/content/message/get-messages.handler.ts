@@ -1,9 +1,9 @@
 import { Request, Response } from 'firebase-functions';
+import { map, mergeMap } from 'rxjs/operators';
+import { allTruthy } from '../../../utils';
 import { ResponseService } from '../../response.service';
 import { userDetails$ } from '../../user-access.service';
-import { mergeMap } from 'rxjs/operators';
 import { getMessages$ } from '../content.service';
-import { allTruthy } from '../../../utils';
 
 export const GET_MESSAGES_URL = '/:id/messages';
 
@@ -18,6 +18,7 @@ export const getMessagesHandler = (req: Request, res: Response) => {
 
     userDetails$(token).pipe(
         mergeMap(userDetails => getMessages$(userDetails.uid, topicId)),
+        map(messages => ({ data: messages })),
     ).subscribe(
         (data) => (responder.sendOK(data)),
         (error) => (responder.sendError(error)),

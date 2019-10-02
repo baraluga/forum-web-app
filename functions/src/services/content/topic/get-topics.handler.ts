@@ -1,5 +1,5 @@
 import { Request, Response } from 'firebase-functions';
-import { mergeMap } from 'rxjs/operators';
+import { mergeMap, map } from 'rxjs/operators';
 import { allTruthy } from '../../../utils';
 import { ResponseService } from '../../response.service';
 import { userDetails$ } from '../../user-access.service';
@@ -16,6 +16,7 @@ export const getTopicsHandler = (req: Request, res: Response) => {
 
     userDetails$(token).pipe(
         mergeMap(userDetails => getTopics$(userDetails.uid)),
+        map(topics => ({ data: topics })),
     ).subscribe(
         (data) => (responder.sendOK(data)),
         (error) => (responder.sendError(error)),
