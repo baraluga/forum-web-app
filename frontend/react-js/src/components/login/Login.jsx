@@ -1,9 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './Login.css';
 
-const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+const Login = ({ setEmail, setPassword, handleLogin }) => {
   return (
     <div>
       Email:{' '}
@@ -13,13 +11,11 @@ const Login = () => {
         type="password"
         onChange={({ target }) => setPassword(target.value)}
       />
-      <button type="submit" onClick={handleLogin({ email, password })}>
+      <button type="submit" onClick={handleLogin}>
         Login
       </button>
     </div>
   );
 };
-
-const handleLogin = ({ email, password }) => console.log({ email, password });
 
 export default Login;
