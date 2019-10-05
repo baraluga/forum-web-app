@@ -12,6 +12,8 @@ export const endpoints = {
     login: `${BASE_ENDPOINTS.user}/login`,
     validate: `${BASE_ENDPOINTS.user}/validate`,
   },
-  topics: {},
+  topics: {
+    getTopics: BASE_ENDPOINTS.topics,
+  },
   messages: {},
 };

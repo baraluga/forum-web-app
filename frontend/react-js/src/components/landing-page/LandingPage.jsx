@@ -1,14 +1,14 @@
-import React, { useState, Fragment } from 'react';
-import Login from '../login/Login';
-import './LandingPage.css';
 import Axios from 'axios';
+import React, { useState } from 'react';
+import { Link, Redirect } from 'react-router-dom';
 import { endpoints } from '../../utils';
+import { Login } from '../login/Login';
+import './LandingPage.css';
 
-export const LandingPage = () => {
+export const LandingPage = ({ token, setToken }) => {
   // states
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [token, setToken] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -29,17 +29,21 @@ export const LandingPage = () => {
   };
 
   return !!token ? (
-    <div>hello, world</div>
+    <Redirect to="/topics"></Redirect>
   ) : (
-    <Fragment>
+    // Login / Register Page
+    <div>
       <Login
         handleLogin={login}
         setEmail={setEmail}
         setPassword={setPassword}
       ></Login>
       {/* TODO: Proper loading indicator and error reporting */}
-      {loading && <text>loading...</text>}
-      {error && <text>{error}</text>}
-    </Fragment>
+      {loading && <pre>loading...</pre>}
+      {error && <pre>{error}</pre>}
+      <pre>
+        Don't have an account yet? Register <Link to="/register">here</Link>
+      </pre>
+    </div>
   );
 };

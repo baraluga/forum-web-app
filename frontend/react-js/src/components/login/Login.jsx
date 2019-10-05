@@ -1,7 +1,7 @@
 import React from 'react';
 import './Login.css';
 
-const Login = ({ setEmail, setPassword, handleLogin }) => {
+export const Login = ({ setEmail, setPassword, handleLogin }) => {
   return (
     <div>
       Email:{' '}
@@ -17,5 +17,3 @@ const Login = ({ setEmail, setPassword, handleLogin }) => {
     </div>
   );
 };
-
-export default Login;
