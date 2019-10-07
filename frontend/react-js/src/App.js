@@ -1,14 +1,9 @@
 import Axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Switch } from 'react-router-dom';
 import './App.css';
-import {
-  LandingPage,
-  NotFoundPage,
-  RegistrationPage,
-  RestoringSessionPage,
-  Topics,
-} from './components';
+import { RestoringSessionPage } from './components';
+import { privateRouteToTopics, routeToLandingPage, routeToNotFound, routeToRegistration } from './routes/routes';
 import { endpoints } from './utils';
 
 function App() {
@@ -38,18 +33,12 @@ function App() {
   ) : (
     <div className="App">
       <Switch>
-        <Route
-          exact
-          path="/login"
-          render={() => <LandingPage token={token} setToken={setToken} />}
-        />
-        <Route
-          exact
-          path="/register"
-          render={() => <RegistrationPage setToken={setToken} />}
-        />
-        <Route exact path="/topics" render={() => <Topics token={token} />} />
-        <Route component={NotFoundPage} />
+        {routeToLandingPage(token, setToken)}
+        {routeToRegistration(setToken)}
+        {privateRouteToTopics(token)}
+
+        {/* 404 */}
+        {routeToNotFound()}
       </Switch>
     </div>
   );

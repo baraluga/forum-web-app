@@ -14,6 +14,7 @@ export const endpoints = {
   },
   topics: {
     getTopics: BASE_ENDPOINTS.topics,
+    createTopic: BASE_ENDPOINTS.content,
   },
   messages: {},
 };

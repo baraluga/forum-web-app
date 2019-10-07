@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Axios from 'axios';
 import { endpoints } from '../../utils';
+import { CreateTopic } from './CreateTopic';
 
 export const Topics = ({ token }) => {
   const [topics, setTopics] = useState([]);
@@ -23,9 +24,14 @@ export const Topics = ({ token }) => {
     // eslint-disable-next-line
   }, []);
 
+  // event handlers
+  const handleAddTopic = newTopic => setTopics([...topics, newTopic]);
+
   return (
     <div className="topic-container">
       <h2>Your Topics</h2>
+      <h3>Create new topic</h3>
+      <CreateTopic token={token} addTopic={handleAddTopic} />
       {loading && <div className="loading">Loading topics...</div>}
       {error && <div className="error">{error}</div>}
       {(topics || []).map(topic => renderTopic(topic))}
@@ -35,8 +41,8 @@ export const Topics = ({ token }) => {
 
 // render functions;
 
-const renderTopic = ({ subject, description, updatedAt }) => (
-  <div className="topic">
+const renderTopic = ({ subject, description, updatedAt, id }) => (
+  <div className="topic" key={id}>
     <h4>{subject}</h4>
     <h5>{description}</h5>
     Last updated at: {updatedAt}
