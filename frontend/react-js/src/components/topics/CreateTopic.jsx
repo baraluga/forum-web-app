@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Axios from 'axios';
-import { endpoints } from '../../utils';
+import { endpoints, disabledStyle } from '../../utils';
 
 const _initialForm = { subject: '', description: '' };
 
@@ -28,19 +28,13 @@ export const CreateTopic = ({ token, addTopic }) => {
   };
 
   return (
-    <div className="create-topic">
+    <div className="create-topic" style={loading ? disabledStyle : {}}>
       Subject:{' '}
-      <input
-        type="text"
-        onChange={onSubjectChange}
-        disabled={loading}
-        value={form.subject}
-      />
+      <input type="text" onChange={onSubjectChange} value={form.subject} />
       Description:{' '}
       <input
         type="text"
         onChange={onDescriptionChange}
-        disabled={loading}
         value={form.description}
       />
       <button onClick={() => handleCreate(form, token)}>Create Topic</button>

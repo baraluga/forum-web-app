@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Axios from 'axios';
-import { endpoints } from '../../utils';
+import { endpoints, disabledStyle } from '../../utils';
 
 export const RegistrationPage = ({ setToken }) => {
   const initialState = { name: '', email: '', password: '' };
@@ -18,7 +18,7 @@ export const RegistrationPage = ({ setToken }) => {
   };
 
   return (
-    <div>
+    <div className="registration-page" style={loading ? disabledStyle : {}}>
       Full Name:{' '}
       <input
         type="text"

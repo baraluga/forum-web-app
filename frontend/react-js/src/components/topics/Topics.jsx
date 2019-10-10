@@ -9,20 +9,15 @@ export const Topics = ({ token }) => {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    let ignore = false;
     setLoading(true);
     setError('');
     Axios.get(endpoints.topics.getTopics, {
       headers: { token: token },
     })
-      .then(({ data }) => (!ignore ? setTopics(data.data) : null))
-      .catch(({ response }) =>
-        !ignore ? setError(response.data.message) : null,
-      )
-      .finally(_ => (!ignore ? setLoading(false) : null));
-    return () => (ignore = true);
-    // eslint-disable-next-line
-  }, []);
+      .then(({ data }) => setTopics(data.data))
+      .catch(({ response }) => setError(response.data.message))
+      .finally(_ => setLoading(false));
+  }, [token]);
 
   // event handlers
   const handleAddTopic = newTopic => setTopics([...topics, newTopic]);

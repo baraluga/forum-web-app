@@ -3,7 +3,7 @@ import './Login.css';
 
 export const Login = ({ setEmail, setPassword, handleLogin }) => {
   return (
-    <div>
+    <div className="login">
       Email:{' '}
       <input type="text" onChange={({ target }) => setEmail(target.value)} />
       Password:{' '}

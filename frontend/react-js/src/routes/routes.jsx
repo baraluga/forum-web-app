@@ -19,7 +19,7 @@ const PrivateRoute = ({
       !!authenticated ? (
         <Component {...componentProps} />
       ) : (
-        <Redirect to="/login" />
+        <Redirect to='/login' />
       )
     }
   />
@@ -38,18 +38,18 @@ export const routeToLandingPage = (token, setTokenFn) =>
 export const routeToRegistration = setTokenFn => (
   <Route
     exact
-    path="/register"
+    path='/register'
     render={() => <RegistrationPage setToken={setTokenFn} />}
   />
 );
 
 export const routeToTopics = token => (
-  <Route exact path="/topics" render={() => <Topics token={token} />} />
+  <Route exact path='/topics' render={() => <Topics token={token} />} />
 );
 
 export const privateRouteToTopics = token => (
   <PrivateRoute
-    path="/topics"
+    path='/topics'
     authenticated={token}
     component={Topics}
     componentProps={{ token }}
